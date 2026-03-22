@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agriculturevn-api
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3000}:3000'
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - agriculturevn-network
+
+  mongodb:
+    image: mongo:7
+    container_name: agriculturevn-mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: agricultureVN
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - agriculturevn-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  agriculturevn-network:
+    driver: bridge
