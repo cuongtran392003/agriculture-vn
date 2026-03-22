@@ -1,0 +1,144 @@
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+export declare class UsersController {
+    private readonly usersService;
+    constructor(usersService: UsersService);
+    create(createUserDto: CreateUserDto): Promise<import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }>;
+    findAll(): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    })[], import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, "find", {}>;
+    findOne(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }) | null, import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, "findOne", {}>;
+    update(id: string, updateUserDto: UpdateUserDto): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }) | null, import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, "findOneAndUpdate", {}>;
+    remove(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }) | null, import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, {}, import("mongoose").Document<unknown, {}, import("./entities/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./entities/user.entity").User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    } & {
+        id: string;
+    }, "findOneAndDelete", {}>;
+}
