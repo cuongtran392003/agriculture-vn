@@ -1,32 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './entities/user.entity';
+import { User, UserDocument } from './schema/user.entity';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel:Model<UserDocument>
-  ){}
-  create(createUserDto: CreateUserDto) {
-    return this.userModel.create(createUserDto);
+    @InjectModel(User.name) private userModel: Model<UserDocument>
+  ) { }
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const hashPassword = await bcrypt.hash(createUserDto.password, 10)
+      const user = await this.userModel.create(
+        {
+          name: createUserDto.name,
+          email: createUserDto.email,
+          password: hashPassword,
+          role: createUserDto.role, 
+        }
+      )
+      return {
+        message: 'User created successfully',
+        data: user  
+      }
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('Email already exists');
+      }
+    }
   }
 
   findAll() {
-    return this.userModel.find();
+    const user = this.userModel.find().select('-password')
+    return {
+      message: 'User fetched successfully',
+      data: user  
+    };
   }
 
-  findOne(id: number) {
-    return this.userModel.findById(id);
+  findOne(id: string) {
+    return this.userModel.findById(id).select('-password');
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return this.userModel.findByIdAndUpdate(id, updateUserDto);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.userModel.findByIdAndDelete(id);
+  }
+
+  async findByEmail(email: string){
+    return await this.userModel.findOne({email})
   }
 }
