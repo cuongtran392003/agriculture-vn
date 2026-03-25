@@ -5,31 +5,33 @@ import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/co
 import * as bcrypt from 'bcrypt'
 import { LoginDto } from "./dto/login.dto";
 import { ConfigService } from "@nestjs/config";
+import { User, UserDocument } from "../users/schema/user.entity";
+import { Model } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
 
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        private userService: UsersService,
         private jwtService: JwtService,
-        private configService: ConfigService
+        private configService: ConfigService,
+        @InjectModel(User.name) private userModel: Model<UserDocument>
     ) { }
 
     async register(registerDto: RegisterDto) {
-        try {
-            const existingUser = await this.userService.findByEmail(registerDto.email)
+        const existingUser = await this.userModel.findOne({email: registerDto.email})
             if (existingUser) {
                 throw new ConflictException('Email already exists')
             }
 
             const hashedPassword = await bcrypt.hash(registerDto.password, 10)
 
-            const user = await this.userService.create({
+            const user = await this.userModel.create({
                 name: registerDto.name,
                 email: registerDto.email,
                 password: hashedPassword,
-                role: 'Farmer'
+                role: registerDto.role
             })
 
             const token = this.generateToken(user)
@@ -37,17 +39,17 @@ export class AuthService {
                 message: "Register successful",
                 data: { token, user }
             }
-        } catch (error) {
-            console.log(error)
-        }
     }
 
     async login(loginDto: LoginDto) {
-        const user = await this.userService.findByEmail(loginDto.email)
+        console.log(loginDto)
+        const user = await this.userModel.findOne({email: loginDto.email})
+        console.log(user)   
         if (!user) {
             throw new UnauthorizedException('Invalid credentials')
         }
         const isPasswordValid = await bcrypt.compare(loginDto.password, user.password)
+        console.log(isPasswordValid)
         if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid credentials')
         }
@@ -72,7 +74,7 @@ export class AuthService {
             const payload = this.jwtService.verify(refreshToken,{
                 secret:this.configService.get<string>('JWT_SECRET')
             })
-            const user = await this.userService.findOne(payload.sub)
+            const user = await this.userModel.findById(payload.sub)
             if(!user){
                 throw new UnauthorizedException('User not found')
             }

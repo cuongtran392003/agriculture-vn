@@ -41,51 +41,54 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const jwt_1 = require("@nestjs/jwt");
-const users_service_1 = require("../users/users.service");
 const common_1 = require("@nestjs/common");
 const bcrypt = __importStar(require("bcrypt"));
 const config_1 = require("@nestjs/config");
+const user_entity_1 = require("../users/schema/user.entity");
+const mongoose_1 = require("mongoose");
+const mongoose_2 = require("@nestjs/mongoose");
 let AuthService = class AuthService {
-    userService;
     jwtService;
     configService;
-    constructor(userService, jwtService, configService) {
-        this.userService = userService;
+    userModel;
+    constructor(jwtService, configService, userModel) {
         this.jwtService = jwtService;
         this.configService = configService;
+        this.userModel = userModel;
     }
     async register(registerDto) {
-        try {
-            const existingUser = await this.userService.findByEmail(registerDto.email);
-            if (existingUser) {
-                throw new common_1.ConflictException('Email already exists');
-            }
-            const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-            const user = await this.userService.create({
-                name: registerDto.name,
-                email: registerDto.email,
-                password: hashedPassword,
-                role: 'Farmer'
-            });
-            const token = this.generateToken(user);
-            return {
-                message: "Register successful",
-                data: { token, user }
-            };
+        const existingUser = await this.userModel.findOne({ email: registerDto.email });
+        if (existingUser) {
+            throw new common_1.ConflictException('Email already exists');
         }
-        catch (error) {
-            console.log(error);
-        }
+        const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+        const user = await this.userModel.create({
+            name: registerDto.name,
+            email: registerDto.email,
+            password: hashedPassword,
+            role: registerDto.role
+        });
+        const token = this.generateToken(user);
+        return {
+            message: "Register successful",
+            data: { token, user }
+        };
     }
     async login(loginDto) {
-        const user = await this.userService.findByEmail(loginDto.email);
+        console.log(loginDto);
+        const user = await this.userModel.findOne({ email: loginDto.email });
+        console.log(user);
         if (!user) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
+        console.log(isPasswordValid);
         if (!isPasswordValid) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
@@ -107,7 +110,7 @@ let AuthService = class AuthService {
             const payload = this.jwtService.verify(refreshToken, {
                 secret: this.configService.get('JWT_SECRET')
             });
-            const user = await this.userService.findOne(payload.sub);
+            const user = await this.userModel.findById(payload.sub);
             if (!user) {
                 throw new common_1.UnauthorizedException('User not found');
             }
@@ -125,8 +128,9 @@ let AuthService = class AuthService {
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService,
-        config_1.ConfigService])
+    __param(2, (0, mongoose_2.InjectModel)(user_entity_1.User.name)),
+    __metadata("design:paramtypes", [jwt_1.JwtService,
+        config_1.ConfigService,
+        mongoose_1.Model])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

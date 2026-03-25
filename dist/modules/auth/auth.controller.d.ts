@@ -11,24 +11,21 @@ export declare class AuthController {
                 accessToken: string;
                 refreshToken: string;
             };
-            user: {
-                message: string;
-                data: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
-                    _id: import("mongoose").Types.ObjectId;
-                }> & {
-                    __v: number;
-                } & {
-                    id: string;
-                }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
-                    _id: import("mongoose").Types.ObjectId;
-                }> & {
-                    __v: number;
-                } & {
-                    id: string;
-                };
-            } | undefined;
+            user: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
+                _id: import("mongoose").Types.ObjectId;
+            }> & {
+                __v: number;
+            } & {
+                id: string;
+            }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
+                _id: import("mongoose").Types.ObjectId;
+            }> & {
+                __v: number;
+            } & {
+                id: string;
+            };
         };
-    } | undefined>;
+    }>;
     login(loginDto: LoginDto): Promise<{
         message: string;
         data: {

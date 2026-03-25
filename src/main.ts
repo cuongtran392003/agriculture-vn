@@ -7,10 +7,13 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const port =process.env.PORT
+
   app.setGlobalPrefix('api/v1')
 
+  app.enableCors()
+
   app.useGlobalInterceptors(new ResponseInterceptor())
-  
 
   app.useGlobalFilters(new AllExceptionsFilter())
 
@@ -18,6 +21,6 @@ async function bootstrap() {
     whitelist:true,
     transform:true,
   }))
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(port ?? 3000,"0.0.0.0");
 }
 bootstrap();
