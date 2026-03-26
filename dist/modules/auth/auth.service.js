@@ -72,7 +72,7 @@ let AuthService = class AuthService {
             name: registerDto.name,
             email: registerDto.email,
             password: hashedPassword,
-            role: registerDto.role
+            role: "farmer"
         });
         const token = this.generateToken(user);
         return {
