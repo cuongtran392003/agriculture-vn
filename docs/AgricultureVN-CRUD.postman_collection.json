@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+		"name": "AgricultureVN CRUD API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Farm",
+			"item": [
+				{
+					"name": "1. Create Farm",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"64b5f8c6d1d2b7b5f0e7d6a1\",\n    \"name\": \"Nông trại Đà Lạt\",\n    \"description\": \"Chuyên rau sạch\",\n    \"location\": \"Đà Lạt, Lâm Đồng\"\n}"
+						},
+						"url": "http://localhost:3000/api/v1/farm"
+					}
+				},
+				{
+					"name": "2. Get All Farms",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:3000/api/v1/farm"
+					}
+				},
+				{
+					"name": "3. Get Farm By Id",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:3000/api/v1/farm/{{farmId}}"
+					}
+				},
+				{
+					"name": "4. Update Farm",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Nông trại Đà Lạt (Cập nhật)\"\n}"
+						},
+						"url": "http://localhost:3000/api/v1/farm/{{farmId}}"
+					}
+				},
+				{
+					"name": "5. Delete Farm",
+					"request": {
+						"method": "DELETE",
+						"url": "http://localhost:3000/api/v1/farm/{{farmId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Plot",
+			"item": [
+				{
+					"name": "1. Create Plot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"farmId\": \"{{farmId}}\",\n    \"name\": \"Lô A1\",\n    \"code\": \"A1-tomato\",\n    \"description\": \"Trồng cà chua chua\"\n}"
+						},
+						"url": "http://localhost:3000/api/v1/plot"
+					}
+				},
+				{
+					"name": "2. Get All Plots",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:3000/api/v1/plot"
+					}
+				},
+				{
+					"name": "3. Get Plot By Id",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:3000/api/v1/plot/{{plotId}}"
+					}
+				},
+				{
+					"name": "4. Update Plot",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Lô A1 (Đã chia nhỏ)\"\n}"
+						},
+						"url": "http://localhost:3000/api/v1/plot/{{plotId}}"
+					}
+				},
+				{
+					"name": "5. Delete Plot",
+					"request": {
+						"method": "DELETE",
+						"url": "http://localhost:3000/api/v1/plot/{{plotId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "1. Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"farmId\": \"{{farmId}}\",\n    \"plotId\": \"{{plotId}}\",\n    \"title\": \"Tưới cây\",\n    \"description\": \"Tưới 2 lít nước cho mỗi cây\",\n    \"cropName\": \"Cà chua\",\n    \"scheduledDate\": \"2026-03-31\",\n    \"scheduledTime\": \"08:00\",\n    \"priority\": \"high\",\n    \"note\": \"Chú ý kiểm tra sâu bệnh\"\n}"
+						},
+						"url": "http://localhost:3000/api/v1/tasks"
+					}
+				},
+				{
+					"name": "2. Get All Tasks",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:3000/api/v1/tasks"
+					}
+				},
+				{
+					"name": "3. Get Task By Id",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:3000/api/v1/tasks/{{taskId}}"
+					}
+				},
+				{
+					"name": "4. Update Task Status (Complete)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"completed\"\n}"
+						},
+						"url": "http://localhost:3000/api/v1/tasks/{{taskId}}"
+					}
+				},
+				{
+					"name": "5. Delete Task",
+					"request": {
+						"method": "DELETE",
+						"url": "http://localhost:3000/api/v1/tasks/{{taskId}}"
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "farmId",
+			"value": "REPLACE_ME_WITH_FARM_ID"
+		},
+		{
+			"key": "plotId",
+			"value": "REPLACE_ME_WITH_PLOT_ID"
+		},
+		{
+			"key": "taskId",
+			"value": "REPLACE_ME_WITH_TASK_ID"
+		}
+	]
+}
