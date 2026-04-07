@@ -1,6 +1,11 @@
 import { IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateTaskDto {
+
+  @IsString()
+  @IsOptional()
+  userId?: string;
+
   @IsString()
   @IsNotEmpty()
   farmId: string;

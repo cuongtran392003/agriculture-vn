@@ -17,19 +17,22 @@ const common_1 = require("@nestjs/common");
 const plot_service_1 = require("./plot.service");
 const create_plot_dto_1 = require("./dto/create-plot.dto");
 const update_plot_dto_1 = require("./dto/update-plot.dto");
+const jwt_auth_guard_1 = require("../../common/guards/jwt-auth.guard");
 let PlotController = class PlotController {
     plotService;
     constructor(plotService) {
         this.plotService = plotService;
     }
-    async create(createPlotDto) {
+    async create(req, createPlotDto) {
+        createPlotDto.userId = req.user._id;
         return await this.plotService.create(createPlotDto);
     }
-    async findAll(farmId) {
+    async findAll(req, farmId) {
+        const userId = req.user._id;
         if (farmId) {
-            return await this.plotService.findByFarmId(farmId);
+            return await this.plotService.findByFarmAndUserId(farmId, userId);
         }
-        return await this.plotService.findAll();
+        return await this.plotService.findByUserId(userId);
     }
     async findOne(id) {
         return await this.plotService.findOne(id);
@@ -44,16 +47,18 @@ let PlotController = class PlotController {
 exports.PlotController = PlotController;
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_plot_dto_1.CreatePlotDto]),
+    __metadata("design:paramtypes", [Object, create_plot_dto_1.CreatePlotDto]),
     __metadata("design:returntype", Promise)
 ], PlotController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)("farmId")),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)("farmId")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], PlotController.prototype, "findAll", null);
 __decorate([
@@ -79,6 +84,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PlotController.prototype, "remove", null);
 exports.PlotController = PlotController = __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)("plot"),
     __metadata("design:paramtypes", [plot_service_1.PlotService])
 ], PlotController);

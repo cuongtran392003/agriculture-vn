@@ -7,26 +7,32 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UseGuards,
 } from "@nestjs/common";
 import { PlotService } from "./plot.service";
 import { CreatePlotDto } from "./dto/create-plot.dto";
 import { UpdatePlotDto } from "./dto/update-plot.dto";
+import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 
+@UseGuards(JwtAuthGuard)
 @Controller("plot")
 export class PlotController {
   constructor(private readonly plotService: PlotService) {}
 
   @Post()
-  async create(@Body() createPlotDto: CreatePlotDto) {
+  async create(@Req() req:any,@Body() createPlotDto: CreatePlotDto) {
+    createPlotDto.userId = req.user._id
     return await this.plotService.create(createPlotDto);
   }
 
   @Get()
-  async findAll(@Query("farmId") farmId?: string) {
+  async findAll(@Req() req:any,@Query("farmId") farmId?: string) {
+    const userId = req.user._id
     if (farmId) {
-      return await this.plotService.findByFarmId(farmId);
+      return await this.plotService.findByFarmAndUserId(farmId, userId);
     }
-    return await this.plotService.findAll();
+    return await this.plotService.findByUserId(userId);
   }
 
   @Get(":id")

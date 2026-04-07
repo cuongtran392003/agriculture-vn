@@ -13,12 +13,17 @@ exports.PlotSchema = exports.Plot = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let Plot = class Plot {
+    userId;
     farmId;
     name;
     code;
     description;
 };
 exports.Plot = Plot;
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: "User", required: true, index: true }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Plot.prototype, "userId", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: "Farm", required: true, index: true }),
     __metadata("design:type", mongoose_2.Types.ObjectId)

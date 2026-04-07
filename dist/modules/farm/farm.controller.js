@@ -17,15 +17,18 @@ const common_1 = require("@nestjs/common");
 const farm_service_1 = require("./farm.service");
 const create_farm_dto_1 = require("./dto/create-farm.dto");
 const update_farm_dto_1 = require("./dto/update-farm.dto");
+const jwt_auth_guard_1 = require("../../common/guards/jwt-auth.guard");
 let FarmController = class FarmController {
     farmService;
     constructor(farmService) {
         this.farmService = farmService;
     }
-    async create(createFarmDto) {
+    async create(req, createFarmDto) {
+        createFarmDto.userId = req.user._id;
         return await this.farmService.create(createFarmDto);
     }
-    async findAll(userId) {
+    async findAll(req) {
+        const userId = req.user._id;
         if (userId) {
             return await this.farmService.findByUserId(userId);
         }
@@ -44,16 +47,17 @@ let FarmController = class FarmController {
 exports.FarmController = FarmController;
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_farm_dto_1.CreateFarmDto]),
+    __metadata("design:paramtypes", [Object, create_farm_dto_1.CreateFarmDto]),
     __metadata("design:returntype", Promise)
 ], FarmController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)("userId")),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FarmController.prototype, "findAll", null);
 __decorate([
@@ -79,6 +83,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FarmController.prototype, "remove", null);
 exports.FarmController = FarmController = __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)("farm"),
     __metadata("design:paramtypes", [farm_service_1.FarmService])
 ], FarmController);

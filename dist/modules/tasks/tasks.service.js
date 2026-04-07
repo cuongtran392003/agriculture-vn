@@ -53,6 +53,15 @@ let TasksService = class TasksService {
             data: task,
         };
     }
+    async findByUserId(userId) {
+        const tasks = await this.taskModel
+            .find({ userId })
+            .sort({ createdAt: -1 });
+        return {
+            message: "Tasks fetched successfully",
+            data: tasks,
+        };
+    }
     async findByFarmId(farmId) {
         const tasks = await this.taskModel
             .find({ farmId })

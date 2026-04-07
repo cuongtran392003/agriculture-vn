@@ -41,10 +41,19 @@ export class PlotService {
     };
   }
 
-  async findByFarmId(farmId: string) {
+  async findByFarmAndUserId(farmId: string, userId: string) {
     const plots = await this.plotModel
-      .find({ farmId })
+      .find({ farmId, userId })
+      .populate("farmId", "name")
       .sort({ createdAt: -1 });
+    return {
+      message: "Plots fetched successfully",
+      data: plots,
+    };
+  }
+
+  async findByUserId(userId: string){
+    const plots = await this.plotModel.find({userId}).sort({createdAt: -1})
     return {
       message: "Plots fetched successfully",
       data: plots,

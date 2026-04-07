@@ -17,4 +17,8 @@ export class CreatePlotDto {
     @IsString()
     @IsNotEmpty()
     farmId: string
+
+    @IsString()
+    @IsNotEmpty()
+    userId: string
 }

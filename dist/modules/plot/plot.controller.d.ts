@@ -4,7 +4,7 @@ import { UpdatePlotDto } from "./dto/update-plot.dto";
 export declare class PlotController {
     private readonly plotService;
     constructor(plotService: PlotService);
-    create(createPlotDto: CreatePlotDto): Promise<{
+    create(req: any, createPlotDto: CreatePlotDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/plot.schema").Plot, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/plot.schema").Plot & {
             _id: import("mongoose").Types.ObjectId;
@@ -14,7 +14,7 @@ export declare class PlotController {
             id: string;
         };
     }>;
-    findAll(farmId?: string): Promise<{
+    findAll(req: any, farmId?: string): Promise<{
         message: string;
         data: (import("mongoose").Document<unknown, {}, import("./schema/plot.schema").Plot, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/plot.schema").Plot & {
             _id: import("mongoose").Types.ObjectId;

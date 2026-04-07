@@ -35,7 +35,17 @@ export declare class PlotService {
             id: string;
         };
     }>;
-    findByFarmId(farmId: string): Promise<{
+    findByFarmAndUserId(farmId: string, userId: string): Promise<{
+        message: string;
+        data: (import("mongoose").Document<unknown, {}, Plot, {}, import("mongoose").DefaultSchemaOptions> & Plot & {
+            _id: import("mongoose").Types.ObjectId;
+        } & {
+            __v: number;
+        } & {
+            id: string;
+        })[];
+    }>;
+    findByUserId(userId: string): Promise<{
         message: string;
         data: (import("mongoose").Document<unknown, {}, Plot, {}, import("mongoose").DefaultSchemaOptions> & Plot & {
             _id: import("mongoose").Types.ObjectId;

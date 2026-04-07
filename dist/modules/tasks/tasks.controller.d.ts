@@ -4,7 +4,7 @@ import { UpdateTaskDto } from "./dto/update-task.dto";
 export declare class TasksController {
     private readonly tasksService;
     constructor(tasksService: TasksService);
-    create(createTaskDto: CreateTaskDto): Promise<{
+    create(req: any, createTaskDto: CreateTaskDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/task.schema").Task, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/task.schema").Task & {
             _id: import("mongoose").Types.ObjectId;
@@ -14,7 +14,7 @@ export declare class TasksController {
             id: string;
         };
     }>;
-    findAll(farmId?: string, status?: string): Promise<{
+    findAll(req: any, farmId?: string, status?: string): Promise<{
         message: string;
         data: (import("mongoose").Document<unknown, {}, import("./schema/task.schema").Task, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/task.schema").Task & {
             _id: import("mongoose").Types.ObjectId;

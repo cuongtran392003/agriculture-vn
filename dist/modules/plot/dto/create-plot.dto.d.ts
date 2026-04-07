@@ -3,4 +3,5 @@ export declare class CreatePlotDto {
     code?: string;
     description?: string;
     farmId: string;
+    userId: string;
 }

@@ -1,4 +1,5 @@
 export declare class CreateTaskDto {
+    userId?: string;
     farmId: string;
     plotId?: string;
     title: string;

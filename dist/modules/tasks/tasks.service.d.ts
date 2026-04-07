@@ -35,6 +35,16 @@ export declare class TasksService {
             id: string;
         };
     }>;
+    findByUserId(userId: string): Promise<{
+        message: string;
+        data: (import("mongoose").Document<unknown, {}, Task, {}, import("mongoose").DefaultSchemaOptions> & Task & {
+            _id: import("mongoose").Types.ObjectId;
+        } & {
+            __v: number;
+        } & {
+            id: string;
+        })[];
+    }>;
     findByFarmId(farmId: string): Promise<{
         message: string;
         data: (import("mongoose").Document<unknown, {}, Task, {}, import("mongoose").DefaultSchemaOptions> & Task & {

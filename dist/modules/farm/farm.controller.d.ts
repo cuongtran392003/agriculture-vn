@@ -4,7 +4,7 @@ import { UpdateFarmDto } from "./dto/update-farm.dto";
 export declare class FarmController {
     private readonly farmService;
     constructor(farmService: FarmService);
-    create(createFarmDto: CreateFarmDto): Promise<{
+    create(req: any, createFarmDto: CreateFarmDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/farm.entity").Farm, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/farm.entity").Farm & {
             _id: import("mongoose").Types.ObjectId;
@@ -14,7 +14,7 @@ export declare class FarmController {
             id: string;
         };
     }>;
-    findAll(userId?: string): Promise<{
+    findAll(req: any): Promise<{
         message: string;
         data: (import("mongoose").Document<unknown, {}, import("./schema/farm.entity").Farm, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/farm.entity").Farm & {
             _id: import("mongoose").Types.ObjectId;
