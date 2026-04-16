@@ -18,6 +18,7 @@ const tasks_service_1 = require("./tasks.service");
 const create_task_dto_1 = require("./dto/create-task.dto");
 const update_task_dto_1 = require("./dto/update-task.dto");
 const jwt_auth_guard_1 = require("../../common/guards/jwt-auth.guard");
+const pagination_dto_1 = require("../../common/dto/pagination.dto");
 let TasksController = class TasksController {
     tasksService;
     constructor(tasksService) {
@@ -27,18 +28,9 @@ let TasksController = class TasksController {
         createTaskDto.userId = req.user._id;
         return await this.tasksService.create(createTaskDto);
     }
-    async findAll(req, farmId, status) {
+    async findAll(req, paginationDto, farmId, status) {
         const userId = req.user._id;
-        if (userId) {
-            return await this.tasksService.findByUserId(userId);
-        }
-        if (farmId) {
-            return await this.tasksService.findByFarmId(farmId);
-        }
-        if (status) {
-            return await this.tasksService.findByStatus(status);
-        }
-        return await this.tasksService.findAll();
+        return await this.tasksService.findAll(userId, paginationDto, farmId, status);
     }
     async findOne(id) {
         return await this.tasksService.findOne(id);
@@ -62,10 +54,11 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Query)("farmId")),
-    __param(2, (0, common_1.Query)("status")),
+    __param(1, (0, common_1.Query)()),
+    __param(2, (0, common_1.Query)("farmId")),
+    __param(3, (0, common_1.Query)("status")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, pagination_dto_1.PaginationDto, String, String]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "findAll", null);
 __decorate([

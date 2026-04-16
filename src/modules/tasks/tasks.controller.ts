@@ -15,6 +15,7 @@ import { TasksService } from "./tasks.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
+import { PaginationDto } from "src/common/dto/pagination.dto";
 
 @UseGuards(JwtAuthGuard)
 @Controller("tasks")
@@ -30,20 +31,12 @@ export class TasksController {
   @Get()
   async findAll(
     @Req() req:any,
+    @Query() paginationDto: PaginationDto,
     @Query("farmId") farmId?: string,
     @Query("status") status?: string,
   ) {
     const userId = req.user._id
-    if(userId){
-      return await this.tasksService.findByUserId(userId);
-    }
-    if (farmId) {
-      return await this.tasksService.findByFarmId(farmId);
-    }
-    if (status) {
-      return await this.tasksService.findByStatus(status);
-    }
-    return await this.tasksService.findAll();
+    return await this.tasksService.findAll(userId,paginationDto,farmId,status);
   }
 
   @Get(":id")

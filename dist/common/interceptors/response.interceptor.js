@@ -16,6 +16,7 @@ let ResponseInterceptor = class ResponseInterceptor {
             statusCode,
             message: data?.message || 'Success',
             data: data?.data !== undefined ? data.data : data,
+            ...(data?.meta && { meta: data.meta }),
         })));
     }
 };

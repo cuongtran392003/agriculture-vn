@@ -1,6 +1,7 @@
 import { HydratedDocument, Types } from "mongoose";
 export type TaskDocument = HydratedDocument<Task>;
 export declare class Task {
+    userId: Types.ObjectId;
     farmId: Types.ObjectId;
     plotId?: Types.ObjectId;
     title: string;
@@ -32,6 +33,15 @@ export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoos
 }, "id"> & {
     id: string;
 }, {
+    userId?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
     farmId?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId, Task, import("mongoose").Document<unknown, {}, Task, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {

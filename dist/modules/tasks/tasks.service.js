@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const task_schema_1 = require("./schema/task.schema");
 const mongoose_2 = require("mongoose");
+const response_dto_1 = require("../../common/dto/response.dto");
 let TasksService = class TasksService {
     taskModel;
     constructor(taskModel) {
@@ -29,16 +30,35 @@ let TasksService = class TasksService {
             data: task,
         };
     }
-    async findAll() {
-        const tasks = await this.taskModel
-            .find()
-            .populate("farmId", "name")
-            .populate("plotId", "name code")
-            .sort({ scheduledDate: -1 });
-        return {
-            message: "Tasks fetched successfully",
-            data: tasks,
-        };
+    async findAll(userId, paginationDto, farmId, status) {
+        const { page = 1, limit = 10 } = paginationDto;
+        const skip = (page - 1) * limit;
+        const query = { userId };
+        if (farmId) {
+            query.farmId = farmId;
+        }
+        if (status) {
+            query.status = status;
+        }
+        const [tasks, total] = await Promise.all([
+            this.taskModel
+                .find(query)
+                .populate("farmId", "name")
+                .populate("plotId", "name code")
+                .sort({ scheduledDate: -1 })
+                .skip(skip)
+                .limit(limit)
+                .lean(),
+            this.taskModel.countDocuments(query)
+        ]);
+        return new response_dto_1.ResponseDto(200, "Tasks fetched successfully", tasks, {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+            hasNextPage: page < Math.ceil(total / limit),
+            hasPrevPage: page > 1,
+        });
     }
     async findOne(id) {
         const task = await this.taskModel
@@ -56,6 +76,8 @@ let TasksService = class TasksService {
     async findByUserId(userId) {
         const tasks = await this.taskModel
             .find({ userId })
+            .populate("farmId", "name")
+            .populate("plotId", "name code")
             .sort({ createdAt: -1 });
         return {
             message: "Tasks fetched successfully",

@@ -13,6 +13,7 @@ exports.TaskSchema = exports.Task = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let Task = class Task {
+    userId;
     farmId;
     plotId;
     title;
@@ -26,6 +27,10 @@ let Task = class Task {
     completedAt;
 };
 exports.Task = Task;
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: "User", required: true, index: true }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Task.prototype, "userId", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: "Farm", required: true, index: true }),
     __metadata("design:type", mongoose_2.Types.ObjectId)

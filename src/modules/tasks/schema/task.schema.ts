@@ -5,6 +5,9 @@ export type TaskDocument = HydratedDocument<Task>;
 
 @Schema({ timestamps: true })
 export class Task {
+  @Prop({ type: Types.ObjectId, ref: "User", required: true, index: true })
+  userId: Types.ObjectId;
+
   @Prop({ type: Types.ObjectId, ref: "Farm", required: true, index: true })
   farmId: Types.ObjectId;
 

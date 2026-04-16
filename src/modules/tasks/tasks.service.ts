@@ -4,6 +4,8 @@ import { Task } from "./schema/task.schema";
 import { Model } from "mongoose";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
+import { PaginationDto } from "src/common/dto/pagination.dto";
+import { ResponseDto } from "src/common/dto/response.dto";
 
 @Injectable()
 export class TasksService {
@@ -17,16 +19,45 @@ export class TasksService {
     };
   }
 
-  async findAll() {
-    const tasks = await this.taskModel
-      .find()
+  async findAll(userId: string,paginationDto: PaginationDto, farmId?: string, status?:string) {
+
+    const {page = 1, limit =10} = paginationDto
+    const skip = (page - 1) * limit
+
+
+    const query:any ={userId}
+    if(farmId) {
+      query.farmId = farmId
+    }
+    if(status) {
+      query.status = status
+    }
+
+    const [tasks, total] = await Promise.all([
+      this.taskModel
+      .find(query)
       .populate("farmId", "name")
       .populate("plotId", "name code")
-      .sort({ scheduledDate: -1 });
-    return {
-      message: "Tasks fetched successfully",
-      data: tasks,
-    };
+      .sort({ scheduledDate: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+      this.taskModel.countDocuments(query)
+    ])
+    return new ResponseDto(
+      200,
+      "Tasks fetched successfully",
+      tasks,
+      {
+        total,
+        page,
+        limit,
+        totalPages:Math.ceil(total/limit),
+        hasNextPage:page < Math.ceil(total/limit),
+        hasPrevPage: page > 1,
+        
+      }
+    );
   }
 
   async findOne(id: string) {
@@ -46,6 +77,8 @@ export class TasksService {
   async findByUserId(userId: string) {
     const tasks = await this.taskModel
       .find({ userId })
+      .populate("farmId", "name")
+      .populate("plotId", "name code")
       .sort({ createdAt: -1 });
     return {
       message: "Tasks fetched successfully",

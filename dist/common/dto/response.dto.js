@@ -5,10 +5,12 @@ class ResponseDto {
     statusCode;
     message;
     data;
-    constructor(statusCode, message, data) {
+    meta;
+    constructor(statusCode, message, data, meta) {
         this.statusCode = statusCode;
         this.message = message;
         this.data = data;
+        this.meta = meta;
     }
 }
 exports.ResponseDto = ResponseDto;
