@@ -44,8 +44,20 @@ export class UsersService {
     return this.userModel.findById(id).select('-password');
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+        new: true,
+      });
+      return {
+        message: 'User updated successfully',
+        data: user  
+      }
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('Email already exists');
+      }
+    }
   }
 
   remove(id: string) {

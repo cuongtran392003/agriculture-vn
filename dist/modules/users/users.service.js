@@ -51,8 +51,21 @@ let UsersService = class UsersService {
     findOne(id) {
         return this.userModel.findById(id).select('-password');
     }
-    update(id, updateUserDto) {
-        return this.userModel.findByIdAndUpdate(id, updateUserDto);
+    async update(id, updateUserDto) {
+        try {
+            const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+                new: true,
+            });
+            return {
+                message: 'User updated successfully',
+                data: user
+            };
+        }
+        catch (error) {
+            if (error.code === 11000) {
+                throw new common_1.ConflictException('Email already exists');
+            }
+        }
     }
     remove(id) {
         return this.userModel.findByIdAndDelete(id);

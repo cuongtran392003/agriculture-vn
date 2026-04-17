@@ -85,37 +85,22 @@ export declare class UsersController {
     } & {
         id: string;
     }, "findOne", {}>;
-    update(id: string, updateUserDto: UpdateUserDto): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    } & {
-        id: string;
-    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    } & {
-        id: string;
-    }) | null, import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    } & {
-        id: string;
-    }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    } & {
-        id: string;
-    }, {}, import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    } & {
-        id: string;
-    }, "findOneAndUpdate", {}>;
+    update(id: string, updateUserDto: UpdateUserDto): Promise<{
+        message: string;
+        data: (import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        }) | null;
+    } | undefined>;
     remove(id: string): import("mongoose").Query<(import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/user.entity").User & Required<{
         _id: import("mongoose").Types.ObjectId;
     }> & {
