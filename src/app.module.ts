@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TaskModule } from './modules/tasks/tasks.module';
 import { PlotModule } from './modules/plot/plot.module';
 import { FarmModule } from './modules/farm/farm.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FarmModule } from './modules/farm/farm.module';
     TaskModule,
     PlotModule,
     FarmModule,
+    ScheduleModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],

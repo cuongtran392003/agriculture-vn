@@ -24,11 +24,27 @@ let TasksService = class TasksService {
         this.taskModel = taskModel;
     }
     async create(createTaskDto) {
-        const task = await this.taskModel.create(createTaskDto);
-        return {
-            message: "Task created successfully",
-            data: task,
-        };
+        try {
+            const { scheduledDate, scheduledTime } = createTaskDto;
+            console.log('Dữ liệu nhận được:', { scheduledDate, scheduledTime });
+            let reminderAt = new Date(scheduledTime || scheduledDate);
+            if (scheduledTime && scheduledTime.includes('T')) {
+                reminderAt = new Date(scheduledTime);
+            }
+            if (isNaN(reminderAt.getTime())) {
+                throw new Error(`Định dạng ngày giờ không hợp lệ`);
+            }
+            const task = await this.taskModel.create({
+                ...createTaskDto,
+                reminderAt,
+                isNotified: false,
+            });
+            return { message: "Task created successfully", data: task };
+        }
+        catch (error) {
+            console.error('Lỗi chi tiết tại Service:', error.message);
+            throw error;
+        }
     }
     async findAll(userId, paginationDto, farmId, status) {
         const { page = 1, limit = 10 } = paginationDto;

@@ -33,6 +33,9 @@ let UsersController = class UsersController {
     findOne(id) {
         return this.usersService.findOne(id);
     }
+    updateFcmToken(req, fcmToken) {
+        return this.usersService.updateToken(req.user._id, fcmToken);
+    }
     update(id, updateUserDto) {
         return this.usersService.update(id, updateUserDto);
     }
@@ -62,6 +65,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Patch)('update-fcm-token'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)('token')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "updateFcmToken", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

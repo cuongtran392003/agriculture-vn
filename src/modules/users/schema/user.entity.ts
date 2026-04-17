@@ -16,6 +16,12 @@ export class User extends Document {
 
     @Prop({ required: true })
     role: string;
+
+    @Prop()
+    fcmToken: string;
+
+    @Prop()
+    lastActive: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

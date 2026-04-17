@@ -73,6 +73,18 @@ let UsersService = class UsersService {
     async findByEmail(email) {
         return await this.userModel.findOne({ email });
     }
+    async updateToken(userId, token) {
+        if (!userId || !token) {
+            throw new common_1.BadRequestException('Thiếu UserId hoặc Token');
+        }
+        const updatedUser = await this.userModel.findByIdAndUpdate(userId, { $set: { fcmToken: token } }, { new: true });
+        if (!updatedUser) {
+            console.error(`Không tìm thấy user với ID: ${userId}`);
+            throw new common_1.NotFoundException('User không tồn tại');
+        }
+        console.log('✅ Cập nhật MongoDB thành công:', updatedUser.fcmToken);
+        return updatedUser;
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

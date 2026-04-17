@@ -12,6 +12,8 @@ const mongoose_1 = require("@nestjs/mongoose");
 const task_schema_1 = require("./schema/task.schema");
 const tasks_controller_1 = require("./tasks.controller");
 const tasks_service_1 = require("./tasks.service");
+const task_reminder_service_1 = require("./task-reminder.service");
+const users_module_1 = require("../users/users.module");
 let TaskModule = class TaskModule {
 };
 exports.TaskModule = TaskModule;
@@ -19,9 +21,10 @@ exports.TaskModule = TaskModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: task_schema_1.Task.name, schema: task_schema_1.TaskSchema }]),
+            users_module_1.UsersModule
         ],
         controllers: [tasks_controller_1.TasksController],
-        providers: [tasks_service_1.TasksService],
+        providers: [tasks_service_1.TasksService, task_reminder_service_1.TaskReminderService],
         exports: [tasks_service_1.TasksService],
     })
 ], TaskModule);

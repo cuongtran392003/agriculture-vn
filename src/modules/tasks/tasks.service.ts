@@ -12,11 +12,32 @@ export class TasksService {
   constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
 
   async create(createTaskDto: CreateTaskDto) {
-    const task = await this.taskModel.create(createTaskDto);
-    return {
-      message: "Task created successfully",
-      data: task,
-    };
+
+    try {
+    const { scheduledDate, scheduledTime } = createTaskDto;
+    
+      console.log('Dữ liệu nhận được:', { scheduledDate, scheduledTime });
+
+      let reminderAt: Date = new Date(scheduledTime ||  scheduledDate)
+      if(scheduledTime && scheduledTime.includes('T')){
+     reminderAt = new Date(scheduledTime)
+      }
+
+    if (isNaN(reminderAt.getTime())) {
+       throw new Error(`Định dạng ngày giờ không hợp lệ`);
+    }
+
+    const task = await this.taskModel.create({
+      ...createTaskDto,
+      reminderAt,
+      isNotified: false,
+    });
+
+    return { message: "Task created successfully", data: task };
+  } catch (error) {
+    console.error('Lỗi chi tiết tại Service:', error.message);
+    throw error; // Ném lỗi để Exception Filter xử lý
+  }
   }
 
   async findAll(userId: string,paginationDto: PaginationDto, farmId?: string, status?:string) {

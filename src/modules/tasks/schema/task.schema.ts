@@ -42,6 +42,12 @@ export class Task {
 
   @Prop()
   completedAt?: Date;
+
+  @Prop({index:true})
+  reminderAt?: Date;
+
+  @Prop({default: false, index:true})
+  isNotified: boolean
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

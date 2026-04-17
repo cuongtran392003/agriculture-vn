@@ -25,6 +25,8 @@ let Task = class Task {
     priority;
     note;
     completedAt;
+    reminderAt;
+    isNotified;
 };
 exports.Task = Task;
 __decorate([
@@ -75,6 +77,14 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", Date)
 ], Task.prototype, "completedAt", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ index: true }),
+    __metadata("design:type", Date)
+], Task.prototype, "reminderAt", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false, index: true }),
+    __metadata("design:type", Boolean)
+], Task.prototype, "isNotified", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Task);

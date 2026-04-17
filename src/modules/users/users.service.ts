@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -67,4 +67,24 @@ export class UsersService {
   async findByEmail(email: string){
     return await this.userModel.findOne({email})
   }
+
+  async updateToken(userId: string, token: string) {
+  if (!userId || !token) {
+    throw new BadRequestException('Thiếu UserId hoặc Token');
+  }
+
+  const updatedUser = await this.userModel.findByIdAndUpdate(
+    userId,
+    { $set: { fcmToken: token } }, // Dùng $set để đảm bảo ghi đè/tạo mới field
+    { new: true } // Trả về data sau khi đã update
+  );
+
+  if (!updatedUser) {
+    console.error(`Không tìm thấy user với ID: ${userId}`);
+    throw new NotFoundException('User không tồn tại');
+  }
+
+  console.log('✅ Cập nhật MongoDB thành công:', updatedUser.fcmToken);
+  return updatedUser;
+}
 }

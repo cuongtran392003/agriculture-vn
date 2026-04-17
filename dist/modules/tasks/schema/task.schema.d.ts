@@ -13,6 +13,8 @@ export declare class Task {
     priority: string;
     note?: string;
     completedAt?: Date;
+    reminderAt?: Date;
+    isNotified: boolean;
 }
 export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoose").Model<Task, any, any, any, (import("mongoose").Document<unknown, any, Task, any, import("mongoose").DefaultSchemaOptions> & Task & {
     _id: Types.ObjectId;
@@ -133,6 +135,24 @@ export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoos
         id: string;
     }> | undefined;
     completedAt?: import("mongoose").SchemaDefinitionProperty<Date | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    reminderAt?: import("mongoose").SchemaDefinitionProperty<Date | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    isNotified?: import("mongoose").SchemaDefinitionProperty<boolean, Task, import("mongoose").Document<unknown, {}, Task, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
         _id: Types.ObjectId;
