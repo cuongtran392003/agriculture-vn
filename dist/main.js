@@ -39,7 +39,6 @@ const response_interceptor_1 = require("./common/interceptors/response.intercept
 const exception_filter_1 = require("./common/filters/exception.filter");
 const common_1 = require("@nestjs/common");
 const admin = __importStar(require("firebase-admin"));
-const serviceAccount = __importStar(require("./config/service-account.json"));
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const port = process.env.PORT;
@@ -52,6 +51,13 @@ async function bootstrap() {
         transform: true,
     }));
     if (!admin.apps.length) {
+        let serviceAccount;
+        if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+            serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        }
+        else {
+            serviceAccount = require('./config/service-account.json');
+        }
         admin.initializeApp({
             credential: admin.credential.cert(JSON.parse(JSON.stringify(serviceAccount))),
         });
