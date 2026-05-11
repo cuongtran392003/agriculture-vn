@@ -18,6 +18,7 @@ const tasks_module_1 = require("./modules/tasks/tasks.module");
 const plot_module_1 = require("./modules/plot/plot.module");
 const farm_module_1 = require("./modules/farm/farm.module");
 const schedule_1 = require("@nestjs/schedule");
+const market_module_1 = require("./modules/market/market.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -40,7 +41,8 @@ exports.AppModule = AppModule = __decorate([
             tasks_module_1.TaskModule,
             plot_module_1.PlotModule,
             farm_module_1.FarmModule,
-            schedule_1.ScheduleModule.forRoot()
+            schedule_1.ScheduleModule.forRoot(),
+            market_module_1.MarketModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

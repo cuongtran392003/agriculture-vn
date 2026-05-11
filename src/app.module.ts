@@ -9,6 +9,7 @@ import { TaskModule } from './modules/tasks/tasks.module';
 import { PlotModule } from './modules/plot/plot.module';
 import { FarmModule } from './modules/farm/farm.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MarketModule } from './modules/market/market.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     TaskModule,
     PlotModule,
     FarmModule,
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
+    MarketModule
   ],
   controllers: [AppController],
   providers: [AppService],

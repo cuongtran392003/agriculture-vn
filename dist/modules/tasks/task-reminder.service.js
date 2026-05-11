@@ -83,8 +83,7 @@ let TaskReminderService = TaskReminderService_1 = class TaskReminderService {
                             body: task.description || 'Đã đến giờ thực hiện công việc bạn đã hẹn.',
                         },
                         data: {
-                            screen: '/(tabs)/tasks',
-                            taskId: task._id.toString(),
+                            screen: '/(tabs)/schedule',
                         },
                         token: user.fcmToken,
                     };

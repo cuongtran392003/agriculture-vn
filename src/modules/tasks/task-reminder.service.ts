@@ -16,7 +16,6 @@ export class TaskReminderService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  // Chạy mỗi phút một lần
   @Cron(CronExpression.EVERY_MINUTE)
   async handleTaskReminders() {
     this.logger.debug('Đang quét các task đến hạn thông báo...');
@@ -47,8 +46,7 @@ export class TaskReminderService {
             },
             // Dữ liệu kèm theo để Expo Router điều hướng
             data: {
-              screen: '/(tabs)/tasks', 
-              taskId: task._id.toString(),
+              screen: '/(tabs)/schedule', 
             },
             token: user.fcmToken,
           };
