@@ -1,6 +1,9 @@
 import { AuthService } from "./auth.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
+declare class RefreshTokenDto {
+    refreshToken: string;
+}
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
@@ -11,19 +14,13 @@ export declare class AuthController {
                 accessToken: string;
                 refreshToken: string;
             };
-            user: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
+            user: (import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
                 _id: import("mongoose").Types.ObjectId;
             }> & {
                 __v: number;
             } & {
                 id: string;
-            }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
-                _id: import("mongoose").Types.ObjectId;
-            }> & {
-                __v: number;
-            } & {
-                id: string;
-            };
+            }) | null;
         };
     }>;
     login(loginDto: LoginDto): Promise<{
@@ -33,24 +30,16 @@ export declare class AuthController {
                 accessToken: string;
                 refreshToken: string;
             };
-            user: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
+            user: (import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
                 _id: import("mongoose").Types.ObjectId;
             }> & {
                 __v: number;
             } & {
                 id: string;
-            }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, import("../users/schema/user.entity").User, {}, import("mongoose").DefaultSchemaOptions> & import("../users/schema/user.entity").User & Required<{
-                _id: import("mongoose").Types.ObjectId;
-            }> & {
-                __v: number;
-            } & {
-                id: string;
-            };
+            }) | null;
         };
     }>;
-    refresh(body: {
-        refreshToken: string;
-    }): Promise<{
+    refresh(body: RefreshTokenDto): Promise<{
         message: string;
         data: {
             token: {
@@ -60,3 +49,4 @@ export declare class AuthController {
         };
     }>;
 }
+export {};

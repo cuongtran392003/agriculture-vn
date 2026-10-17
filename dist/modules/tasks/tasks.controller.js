@@ -32,14 +32,14 @@ let TasksController = class TasksController {
         const userId = req.user._id;
         return await this.tasksService.findAll(userId, paginationDto, farmId, status);
     }
-    async findOne(id) {
-        return await this.tasksService.findOne(id);
+    async findOne(id, req) {
+        return await this.tasksService.findOne(id, req.user._id);
     }
-    async update(id, updateTaskDto) {
-        return await this.tasksService.update(id, updateTaskDto);
+    async update(id, req, updateTaskDto) {
+        return await this.tasksService.update(id, req.user._id, updateTaskDto);
     }
-    async remove(id) {
-        return await this.tasksService.remove(id);
+    async remove(id, req) {
+        return await this.tasksService.remove(id, req.user._id);
     }
 };
 exports.TasksController = TasksController;
@@ -64,23 +64,26 @@ __decorate([
 __decorate([
     (0, common_1.Get)(":id"),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_task_dto_1.UpdateTaskDto]),
+    __metadata("design:paramtypes", [String, Object, update_task_dto_1.UpdateTaskDto]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(":id"),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "remove", null);
 exports.TasksController = TasksController = __decorate([

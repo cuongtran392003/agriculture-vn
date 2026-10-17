@@ -1,36 +1,46 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Task } from "./schema/task.schema";
-import { Model } from "mongoose";
+import { Model, isValidObjectId } from "mongoose";
+import { Farm } from '../farm/schema/farm.entity';
+import { Plot } from '../plot/schema/plot.schema';
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
-import { PaginationDto } from "src/common/dto/pagination.dto";
-import { ResponseDto } from "src/common/dto/response.dto";
+import { PaginationDto } from "../../common/dto/pagination.dto";
+import { ResponseDto } from "../../common/dto/response.dto";
 
 @Injectable()
 export class TasksService {
-  constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
+  constructor(
+    @InjectModel(Task.name) private taskModel: Model<Task>,
+    @InjectModel(Farm.name) private farmModel: Model<Farm>,
+    @InjectModel(Plot.name) private plotModel: Model<Plot>,
+  ) {}
 
   async create(createTaskDto: CreateTaskDto) {
+    if (!isValidObjectId(createTaskDto.farmId) || !(await this.farmModel.exists({ _id: createTaskDto.farmId, userId: createTaskDto.userId }))) {
+      throw new ForbiddenException('Farm does not belong to the current user');
+    }
+    if (createTaskDto.plotId && (!isValidObjectId(createTaskDto.plotId) || !(await this.plotModel.exists({ _id: createTaskDto.plotId, farmId: createTaskDto.farmId, userId: createTaskDto.userId })))) {
+      throw new ForbiddenException('Plot does not belong to the selected farm');
+    }
 
     try {
     const { scheduledDate, scheduledTime } = createTaskDto;
     
       console.log('Dữ liệu nhận được:', { scheduledDate, scheduledTime });
 
-      let reminderAt: Date = new Date(scheduledTime ||  scheduledDate)
-      if(scheduledTime && scheduledTime.includes('T')){
-     reminderAt = new Date(scheduledTime)
-      }
+      const reminderAt = this.buildReminderAt(scheduledDate, scheduledTime);
 
     if (isNaN(reminderAt.getTime())) {
-       throw new Error(`Định dạng ngày giờ không hợp lệ`);
+       throw new BadRequestException('Invalid scheduled date or time');
     }
 
     const task = await this.taskModel.create({
       ...createTaskDto,
       reminderAt,
       isNotified: false,
+      ...(createTaskDto.status === 'completed' && { completedAt: new Date() }),
     });
 
     return { message: "Task created successfully", data: task };
@@ -40,12 +50,27 @@ export class TasksService {
   }
   }
 
+  private buildReminderAt(scheduledDate: string, scheduledTime?: string): Date {
+    const dateHasTime = scheduledDate.includes('T');
+    const calendarDate = dateHasTime ? scheduledDate.slice(0, 10) : scheduledDate;
+    const reminderValue = scheduledTime?.includes('T')
+      ? scheduledTime
+      : dateHasTime && !scheduledTime
+        ? scheduledDate
+        : `${calendarDate}T${scheduledTime ?? '00:00'}:00+07:00`;
+    const reminderAt = new Date(reminderValue);
+    if (Number.isNaN(reminderAt.getTime())) throw new BadRequestException('Invalid scheduled date or time');
+    return reminderAt;
+  }
+
   async findAll(userId: string,paginationDto: PaginationDto, farmId?: string, status?:string) {
 
     const {page = 1, limit =10} = paginationDto
     const skip = (page - 1) * limit
 
 
+    if (farmId && !isValidObjectId(farmId)) throw new BadRequestException('Invalid farmId');
+    if (status && !['pending', 'completed', 'cancelled'].includes(status)) throw new BadRequestException('Invalid task status');
     const query:any ={userId}
     if(farmId) {
       query.farmId = farmId
@@ -81,9 +106,10 @@ export class TasksService {
     );
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, userId: string) {
+    if (!isValidObjectId(id)) throw new NotFoundException('Task not found');
     const task = await this.taskModel
-      .findById(id)
+      .findOne({ _id: id, userId })
       .populate("farmId", "name")
       .populate("plotId");
     if (!task) {
@@ -130,14 +156,52 @@ export class TasksService {
     };
   }
 
-  async update(id: string, updateTaskDto: UpdateTaskDto) {
-    // If status is changed to "completed", set completedAt
-    if (updateTaskDto.status === "completed") {
-      updateTaskDto["completedAt"] = new Date();
+  async update(id: string, userId: string, updateTaskDto: UpdateTaskDto) {
+    if (!isValidObjectId(id)) throw new NotFoundException('Task not found');
+    const current = await this.taskModel.findOne({ _id: id, userId });
+    if (!current) throw new NotFoundException(`Task with id ${id} not found`);
+
+    const changes: Record<string, unknown> = { ...updateTaskDto };
+    if (updateTaskDto.plotId && (!isValidObjectId(updateTaskDto.plotId) || !(await this.plotModel.exists({
+      _id: updateTaskDto.plotId,
+      farmId: current.farmId,
+      userId,
+    })))) {
+      throw new ForbiddenException('Plot does not belong to this task farm');
+    }
+    if (updateTaskDto.scheduledDate !== undefined || updateTaskDto.scheduledTime !== undefined) {
+      changes.reminderAt = this.buildReminderAt(
+        updateTaskDto.scheduledDate ?? current.scheduledDate,
+        updateTaskDto.scheduledTime ?? current.scheduledTime,
+      );
+      changes.isNotified = false;
+    }
+    if (updateTaskDto.status === 'completed') {
+      changes.completedAt = current.completedAt ?? new Date();
+    } else if (updateTaskDto.status !== undefined) {
+      delete changes.completedAt;
+      if (updateTaskDto.status === 'pending') changes.isNotified = false;
     }
 
-    const task = await this.taskModel.findByIdAndUpdate(id, updateTaskDto, {
+    const update: Record<string, unknown> = { $set: changes };
+    const unset: Record<string, 1> = {};
+    if (current.carePlanId && (updateTaskDto.scheduledDate !== undefined || updateTaskDto.scheduledTime !== undefined)) {
+      // A farmer's explicit schedule takes precedence over weather automation.
+      changes.weatherBlocked = false;
+      unset.careAction = 1;
+      unset.careBaseTime = 1;
+      unset.weatherNote = 1;
+    }
+    if (updateTaskDto.status && updateTaskDto.status !== 'completed') {
+      unset.completedAt = 1;
+    }
+    if (updateTaskDto.status !== undefined || updateTaskDto.scheduledDate !== undefined || updateTaskDto.scheduledTime !== undefined) {
+      unset.reminderClaimedAt = 1;
+    }
+    if (Object.keys(unset).length) update.$unset = unset;
+    const task = await this.taskModel.findOneAndUpdate({ _id: id, userId }, update, {
       new: true,
+      runValidators: true,
     });
     if (!task) {
       throw new NotFoundException(`Task with id ${id} not found`);
@@ -148,8 +212,9 @@ export class TasksService {
     };
   }
 
-  async remove(id: string) {
-    const task = await this.taskModel.findByIdAndDelete(id);
+  async remove(id: string, userId: string) {
+    if (!isValidObjectId(id)) throw new NotFoundException('Task not found');
+    const task = await this.taskModel.findOneAndDelete({ _id: id, userId });
     if (!task) {
       throw new NotFoundException(`Task with id ${id} not found`);
     }

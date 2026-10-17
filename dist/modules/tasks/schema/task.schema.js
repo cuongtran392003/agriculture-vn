@@ -13,6 +13,16 @@ exports.TaskSchema = exports.Task = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let Task = class Task {
+    carePlanId;
+    careKey;
+    careAction;
+    growthStage;
+    careBaseTime;
+    careRainThresholdMm;
+    careHeatThresholdC;
+    weatherBlocked;
+    carePaused;
+    weatherNote;
     userId;
     farmId;
     plotId;
@@ -27,8 +37,49 @@ let Task = class Task {
     completedAt;
     reminderAt;
     isNotified;
+    reminderClaimedAt;
 };
 exports.Task = Task;
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'CarePlan', index: true }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Task.prototype, "carePlanId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Task.prototype, "careKey", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Task.prototype, "careAction", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Task.prototype, "growthStage", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Task.prototype, "careBaseTime", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Task.prototype, "careRainThresholdMm", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", Number)
+], Task.prototype, "careHeatThresholdC", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], Task.prototype, "weatherBlocked", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], Task.prototype, "carePaused", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Task.prototype, "weatherNote", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: "User", required: true, index: true }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
@@ -85,8 +136,13 @@ __decorate([
     (0, mongoose_1.Prop)({ default: false, index: true }),
     __metadata("design:type", Boolean)
 ], Task.prototype, "isNotified", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ index: true }),
+    __metadata("design:type", Date)
+], Task.prototype, "reminderClaimedAt", void 0);
 exports.Task = Task = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Task);
 exports.TaskSchema = mongoose_1.SchemaFactory.createForClass(Task);
+exports.TaskSchema.index({ carePlanId: 1, careKey: 1 }, { unique: true, partialFilterExpression: { carePlanId: { $exists: true }, careKey: { $exists: true } } });
 //# sourceMappingURL=task.schema.js.map

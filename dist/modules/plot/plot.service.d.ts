@@ -1,10 +1,12 @@
 import { Plot } from "./schema/plot.schema";
 import { Model } from "mongoose";
+import { Farm } from '../farm/schema/farm.entity';
 import { CreatePlotDto } from "./dto/create-plot.dto";
 import { UpdatePlotDto } from "./dto/update-plot.dto";
 export declare class PlotService {
     private plotModel;
-    constructor(plotModel: Model<Plot>);
+    private farmModel;
+    constructor(plotModel: Model<Plot>, farmModel: Model<Farm>);
     create(createPlotDto: CreatePlotDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Plot, {}, import("mongoose").DefaultSchemaOptions> & Plot & {
@@ -25,7 +27,7 @@ export declare class PlotService {
             id: string;
         })[];
     }>;
-    findOne(id: string): Promise<{
+    findOne(id: string, userId: string): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Plot, {}, import("mongoose").DefaultSchemaOptions> & Plot & {
             _id: import("mongoose").Types.ObjectId;
@@ -55,7 +57,7 @@ export declare class PlotService {
             id: string;
         })[];
     }>;
-    update(id: string, updatePlotDto: UpdatePlotDto): Promise<{
+    update(id: string, userId: string, updatePlotDto: UpdatePlotDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Plot, {}, import("mongoose").DefaultSchemaOptions> & Plot & {
             _id: import("mongoose").Types.ObjectId;
@@ -65,7 +67,7 @@ export declare class PlotService {
             id: string;
         };
     }>;
-    remove(id: string): Promise<{
+    remove(id: string, userId: string): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Plot, {}, import("mongoose").DefaultSchemaOptions> & Plot & {
             _id: import("mongoose").Types.ObjectId;

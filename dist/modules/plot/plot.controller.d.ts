@@ -24,7 +24,7 @@ export declare class PlotController {
             id: string;
         })[];
     }>;
-    findOne(id: string): Promise<{
+    findOne(id: string, req: any): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/plot.schema").Plot, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/plot.schema").Plot & {
             _id: import("mongoose").Types.ObjectId;
@@ -34,7 +34,7 @@ export declare class PlotController {
             id: string;
         };
     }>;
-    update(id: string, updatePlotDto: UpdatePlotDto): Promise<{
+    update(id: string, req: any, updatePlotDto: UpdatePlotDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/plot.schema").Plot, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/plot.schema").Plot & {
             _id: import("mongoose").Types.ObjectId;
@@ -44,7 +44,7 @@ export declare class PlotController {
             id: string;
         };
     }>;
-    remove(id: string): Promise<{
+    remove(id: string, req: any): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/plot.schema").Plot, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/plot.schema").Plot & {
             _id: import("mongoose").Types.ObjectId;

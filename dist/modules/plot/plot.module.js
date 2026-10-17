@@ -12,13 +12,19 @@ const mongoose_1 = require("@nestjs/mongoose");
 const plot_schema_1 = require("./schema/plot.schema");
 const plot_controller_1 = require("./plot.controller");
 const plot_service_1 = require("./plot.service");
+const farm_entity_1 = require("../farm/schema/farm.entity");
+const task_schema_1 = require("../tasks/schema/task.schema");
 let PlotModule = class PlotModule {
 };
 exports.PlotModule = PlotModule;
 exports.PlotModule = PlotModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: plot_schema_1.Plot.name, schema: plot_schema_1.PlotSchema }]),
+            mongoose_1.MongooseModule.forFeature([
+                { name: plot_schema_1.Plot.name, schema: plot_schema_1.PlotSchema },
+                { name: farm_entity_1.Farm.name, schema: farm_entity_1.FarmSchema },
+                { name: task_schema_1.Task.name, schema: task_schema_1.TaskSchema },
+            ]),
         ],
         controllers: [plot_controller_1.PlotController],
         providers: [plot_service_1.PlotService],

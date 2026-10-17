@@ -1,6 +1,16 @@
 import { HydratedDocument, Types } from "mongoose";
 export type TaskDocument = HydratedDocument<Task>;
 export declare class Task {
+    carePlanId?: Types.ObjectId;
+    careKey?: string;
+    careAction?: string;
+    growthStage?: string;
+    careBaseTime?: string;
+    careRainThresholdMm?: number;
+    careHeatThresholdC?: number;
+    weatherBlocked?: boolean;
+    carePaused?: boolean;
+    weatherNote?: string;
     userId: Types.ObjectId;
     farmId: Types.ObjectId;
     plotId?: Types.ObjectId;
@@ -15,6 +25,7 @@ export declare class Task {
     completedAt?: Date;
     reminderAt?: Date;
     isNotified: boolean;
+    reminderClaimedAt?: Date;
 }
 export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoose").Model<Task, any, any, any, (import("mongoose").Document<unknown, any, Task, any, import("mongoose").DefaultSchemaOptions> & Task & {
     _id: Types.ObjectId;
@@ -35,6 +46,96 @@ export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoos
 }, "id"> & {
     id: string;
 }, {
+    carePlanId?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    careKey?: import("mongoose").SchemaDefinitionProperty<string | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    careAction?: import("mongoose").SchemaDefinitionProperty<string | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    growthStage?: import("mongoose").SchemaDefinitionProperty<string | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    careBaseTime?: import("mongoose").SchemaDefinitionProperty<string | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    careRainThresholdMm?: import("mongoose").SchemaDefinitionProperty<number | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    careHeatThresholdC?: import("mongoose").SchemaDefinitionProperty<number | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    weatherBlocked?: import("mongoose").SchemaDefinitionProperty<boolean | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    carePaused?: import("mongoose").SchemaDefinitionProperty<boolean | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    weatherNote?: import("mongoose").SchemaDefinitionProperty<string | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
     userId?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId, Task, import("mongoose").Document<unknown, {}, Task, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
@@ -153,6 +254,15 @@ export declare const TaskSchema: import("mongoose").Schema<Task, import("mongoos
         id: string;
     }> | undefined;
     isNotified?: import("mongoose").SchemaDefinitionProperty<boolean, Task, import("mongoose").Document<unknown, {}, Task, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    reminderClaimedAt?: import("mongoose").SchemaDefinitionProperty<Date | undefined, Task, import("mongoose").Document<unknown, {}, Task, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Task & {
         _id: Types.ObjectId;

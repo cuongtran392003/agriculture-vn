@@ -2,8 +2,11 @@ import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
-
-    
+import { IsJWT } from 'class-validator';
+class RefreshTokenDto {
+    @IsJWT()
+    refreshToken: string;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +23,7 @@ export class AuthController {
     }
 
     @Post('refresh')
-    refresh(@Body() body:{refreshToken: string}){
+    refresh(@Body() body: RefreshTokenDto){
         return this.authService.refreshToken(body.refreshToken)
     }
 }

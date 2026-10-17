@@ -5,11 +5,17 @@ import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import { TaskReminderService } from './task-reminder.service';
 import { UsersModule } from '../users/users.module';
+import { Farm, FarmSchema } from '../farm/schema/farm.entity';
+import { Plot, PlotSchema } from '../plot/schema/plot.schema';
 
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
+    MongooseModule.forFeature([
+      { name: Task.name, schema: TaskSchema },
+      { name: Farm.name, schema: FarmSchema },
+      { name: Plot.name, schema: PlotSchema },
+    ]),
     UsersModule
   ],
   controllers: [TasksController],

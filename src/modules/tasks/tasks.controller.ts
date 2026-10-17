@@ -14,8 +14,8 @@ import {
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
-import { PaginationDto } from "src/common/dto/pagination.dto";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { PaginationDto } from "../../common/dto/pagination.dto";
 
 @UseGuards(JwtAuthGuard)
 @Controller("tasks")
@@ -40,20 +40,21 @@ export class TasksController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
-    return await this.tasksService.findOne(id);
+  async findOne(@Param("id") id: string, @Req() req: any) {
+    return await this.tasksService.findOne(id, req.user._id);
   }
 
   @Patch(":id")
   async update(
     @Param("id") id: string,
+    @Req() req: any,
     @Body() updateTaskDto: UpdateTaskDto,
   ) {
-    return await this.tasksService.update(id, updateTaskDto);
+    return await this.tasksService.update(id, req.user._id, updateTaskDto);
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
-    return await this.tasksService.remove(id);
+  async remove(@Param("id") id: string, @Req() req: any) {
+    return await this.tasksService.remove(id, req.user._id);
   }
 }

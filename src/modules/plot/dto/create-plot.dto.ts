@@ -19,6 +19,6 @@ export class CreatePlotDto {
     farmId: string
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     userId: string
 }

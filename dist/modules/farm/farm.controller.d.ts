@@ -24,7 +24,7 @@ export declare class FarmController {
             id: string;
         })[];
     }>;
-    findOne(id: string): Promise<{
+    findOne(id: string, req: any): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/farm.entity").Farm, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/farm.entity").Farm & {
             _id: import("mongoose").Types.ObjectId;
@@ -34,7 +34,7 @@ export declare class FarmController {
             id: string;
         };
     }>;
-    update(id: string, updateFarmDto: UpdateFarmDto): Promise<{
+    update(id: string, req: any, updateFarmDto: UpdateFarmDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/farm.entity").Farm, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/farm.entity").Farm & {
             _id: import("mongoose").Types.ObjectId;
@@ -44,7 +44,7 @@ export declare class FarmController {
             id: string;
         };
     }>;
-    remove(id: string): Promise<{
+    remove(id: string, req: any): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/farm.entity").Farm, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/farm.entity").Farm & {
             _id: import("mongoose").Types.ObjectId;

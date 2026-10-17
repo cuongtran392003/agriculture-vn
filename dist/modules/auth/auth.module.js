@@ -17,6 +17,7 @@ const jwt_strategy_1 = require("./strategies/jwt.strategy");
 const users_module_1 = require("../users/users.module");
 const mongoose_1 = require("@nestjs/mongoose");
 const user_entity_1 = require("../users/schema/user.entity");
+const secrets_1 = require("../../common/config/secrets");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -31,7 +32,7 @@ exports.AuthModule = AuthModule = __decorate([
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: (configService) => ({
-                    secret: configService.get('JWT_SECRET'),
+                    secret: (0, secrets_1.getJwtSecret)(configService),
                     signOptions: { expiresIn: '1d' },
                 }),
                 inject: [config_1.ConfigService],

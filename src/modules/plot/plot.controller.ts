@@ -13,7 +13,7 @@ import {
 import { PlotService } from "./plot.service";
 import { CreatePlotDto } from "./dto/create-plot.dto";
 import { UpdatePlotDto } from "./dto/update-plot.dto";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 
 @UseGuards(JwtAuthGuard)
 @Controller("plot")
@@ -36,20 +36,21 @@ export class PlotController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
-    return await this.plotService.findOne(id);
+  async findOne(@Param("id") id: string, @Req() req: any) {
+    return await this.plotService.findOne(id, req.user._id);
   }
 
   @Patch(":id")
   async update(
     @Param("id") id: string,
+    @Req() req: any,
     @Body() updatePlotDto: UpdatePlotDto,
   ) {
-    return await this.plotService.update(id, updatePlotDto);
+    return await this.plotService.update(id, req.user._id, updatePlotDto);
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
-    return await this.plotService.remove(id);
+  async remove(@Param("id") id: string, @Req() req: any) {
+    return await this.plotService.remove(id, req.user._id);
   }
 }

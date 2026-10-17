@@ -16,19 +16,13 @@ export declare class AuthService {
                 accessToken: string;
                 refreshToken: string;
             };
-            user: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, User, {}, import("mongoose").DefaultSchemaOptions> & User & Required<{
+            user: (import("mongoose").Document<unknown, {}, User, {}, import("mongoose").DefaultSchemaOptions> & User & Required<{
                 _id: import("mongoose").Types.ObjectId;
             }> & {
                 __v: number;
             } & {
                 id: string;
-            }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, User, {}, import("mongoose").DefaultSchemaOptions> & User & Required<{
-                _id: import("mongoose").Types.ObjectId;
-            }> & {
-                __v: number;
-            } & {
-                id: string;
-            };
+            }) | null;
         };
     }>;
     login(loginDto: LoginDto): Promise<{
@@ -38,19 +32,13 @@ export declare class AuthService {
                 accessToken: string;
                 refreshToken: string;
             };
-            user: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, User, {}, import("mongoose").DefaultSchemaOptions> & User & Required<{
+            user: (import("mongoose").Document<unknown, {}, User, {}, import("mongoose").DefaultSchemaOptions> & User & Required<{
                 _id: import("mongoose").Types.ObjectId;
             }> & {
                 __v: number;
             } & {
                 id: string;
-            }, {}, import("mongoose").DefaultSchemaOptions> & import("mongoose").Document<unknown, {}, User, {}, import("mongoose").DefaultSchemaOptions> & User & Required<{
-                _id: import("mongoose").Types.ObjectId;
-            }> & {
-                __v: number;
-            } & {
-                id: string;
-            };
+            }) | null;
         };
     }>;
     private generateToken;

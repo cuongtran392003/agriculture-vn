@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../users/schema/user.entity';
+import { getJwtSecret } from '../../common/config/secrets';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { User, UserSchema } from '../users/schema/user.entity';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: getJwtSecret(configService),
         signOptions: { expiresIn: '1d' },
       }),
       inject: [ConfigService],

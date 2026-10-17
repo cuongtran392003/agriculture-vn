@@ -15,8 +15,13 @@ let AllExceptionsFilter = class AllExceptionsFilter {
         const statusCode = exception instanceof common_1.HttpException
             ? exception.getStatus()
             : common_1.HttpStatus.INTERNAL_SERVER_ERROR;
+        const exceptionResponse = exception instanceof common_1.HttpException ? exception.getResponse() : null;
         const message = exception instanceof common_1.HttpException
-            ? exception.message
+            ? typeof exceptionResponse === 'string'
+                ? exceptionResponse
+                : exceptionResponse && typeof exceptionResponse === 'object' && 'message' in exceptionResponse
+                    ? exceptionResponse.message
+                    : exception.message
             : 'Internal server error';
         response.status(statusCode).json({
             statusCode,

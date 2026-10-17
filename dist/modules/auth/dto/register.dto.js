@@ -30,6 +30,12 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.Length)(8, 8, { message: 'Mật khẩu phải có đúng 8 ký tự' }),
+    (0, class_validator_1.Matches)(/[A-Z]/, { message: 'Mật khẩu phải có ít nhất một chữ hoa (A-Z)' }),
+    (0, class_validator_1.Matches)(/[a-z]/, { message: 'Mật khẩu phải có ít nhất một chữ thường (a-z)' }),
+    (0, class_validator_1.Matches)(/[0-9]/, { message: 'Mật khẩu phải có ít nhất một chữ số (0-9)' }),
+    (0, class_validator_1.Matches)(/[^\p{L}\p{N}\s]/u, { message: 'Mật khẩu phải có ít nhất một ký tự đặc biệt, ví dụ !@#$%' }),
+    (0, class_validator_1.Matches)(/\S/, { message: 'Mật khẩu không được chỉ chứa khoảng trắng' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 //# sourceMappingURL=register.dto.js.map

@@ -29,7 +29,10 @@
 
 ```bash
 $ npm install
+$ copy .env.example .env
 ```
+
+For local development, run MongoDB on `127.0.0.1:27017`; `MONGODB_URI` can be changed in `.env`. For Docker Compose, set `JWT_SECRET` in `.env`; the API connects to the `mongodb` service automatically.
 
 ## Compile and run the project
 

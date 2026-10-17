@@ -63,13 +63,20 @@ let TaskReminderService = TaskReminderService_1 = class TaskReminderService {
         this.userModel = userModel;
     }
     async handleTaskReminders() {
+        if (!admin.apps.length) {
+            this.logger.warn('Firebase is not configured; skipping task reminders.');
+            return;
+        }
         this.logger.debug('Đang quét các task đến hạn thông báo...');
         const now = new Date();
+        const staleClaimBefore = new Date(now.getTime() - 5 * 60 * 1000);
         try {
             const pendingTasks = await this.taskModel.find({
                 reminderAt: { $lte: now },
                 isNotified: false,
                 status: 'pending',
+                weatherBlocked: { $ne: true },
+                carePaused: { $ne: true },
             });
             if (pendingTasks.length === 0)
                 return;
@@ -77,6 +84,19 @@ let TaskReminderService = TaskReminderService_1 = class TaskReminderService {
             for (const task of pendingTasks) {
                 const user = await this.userModel.findById(task.userId);
                 if (user && user.fcmToken) {
+                    const claim = await this.taskModel.updateOne({
+                        _id: task._id,
+                        isNotified: false,
+                        status: 'pending',
+                        weatherBlocked: { $ne: true },
+                        carePaused: { $ne: true },
+                        $or: [
+                            { reminderClaimedAt: { $exists: false } },
+                            { reminderClaimedAt: { $lt: staleClaimBefore } },
+                        ],
+                    }, { $set: { reminderClaimedAt: now } });
+                    if (claim.modifiedCount === 0)
+                        continue;
                     const message = {
                         notification: {
                             title: `🌱 Lịch làm nông: ${task.title}`,
@@ -87,12 +107,21 @@ let TaskReminderService = TaskReminderService_1 = class TaskReminderService {
                         },
                         token: user.fcmToken,
                     };
-                    await admin.messaging().send(message);
-                    await this.taskModel.updateOne({ _id: task._id }, { $set: { isNotified: true } });
+                    try {
+                        await admin.messaging().send(message);
+                        await this.taskModel.updateOne({ _id: task._id, reminderClaimedAt: now }, { $set: { isNotified: true }, $unset: { reminderClaimedAt: 1 } });
+                    }
+                    catch (error) {
+                        await this.taskModel.updateOne({ _id: task._id, reminderClaimedAt: now }, { $unset: { reminderClaimedAt: 1 } });
+                        if (error?.code === 'messaging/registration-token-not-registered') {
+                            await this.userModel.updateOne({ _id: user._id }, { $unset: { fcmToken: 1 } });
+                        }
+                        this.logger.error(`Failed to send reminder for task ${task._id}: ${error.message}`);
+                        continue;
+                    }
                     this.logger.log(`✅ Đã gửi thông báo cho Task: ${task.title} (User: ${user.email})`);
                 }
                 else {
-                    await this.taskModel.updateOne({ _id: task._id }, { $set: { isNotified: true } });
                     this.logger.warn(`⚠️ Không tìm thấy fcmToken cho User: ${task.userId}`);
                 }
             }

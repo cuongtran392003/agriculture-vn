@@ -25,7 +25,7 @@ export declare class FarmService {
             id: string;
         })[];
     }>;
-    findOne(id: string): Promise<{
+    findOne(id: string, userId: string): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Farm, {}, import("mongoose").DefaultSchemaOptions> & Farm & {
             _id: import("mongoose").Types.ObjectId;
@@ -45,7 +45,7 @@ export declare class FarmService {
             id: string;
         })[];
     }>;
-    update(id: string, updateFarmDto: UpdateFarmDto): Promise<{
+    update(id: string, userId: string, updateFarmDto: UpdateFarmDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Farm, {}, import("mongoose").DefaultSchemaOptions> & Farm & {
             _id: import("mongoose").Types.ObjectId;
@@ -55,7 +55,7 @@ export declare class FarmService {
             id: string;
         };
     }>;
-    remove(id: string): Promise<{
+    remove(id: string, userId: string): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Farm, {}, import("mongoose").DefaultSchemaOptions> & Farm & {
             _id: import("mongoose").Types.ObjectId;

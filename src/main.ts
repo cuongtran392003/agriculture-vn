@@ -8,7 +8,7 @@ import * as admin from 'firebase-admin';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const port =process.env.PORT
+  const port = Number(process.env.PORT ?? 3000);
 
   app.setGlobalPrefix('api/v1')
 
@@ -23,18 +23,14 @@ async function bootstrap() {
     transform:true,
   }))
 
-  if(!admin.apps.length){
-    let serviceAccount;
-    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    } else {
-      serviceAccount = require('./config/service-account.json');
+  if (!admin.apps.length && process.env.FIREBASE_SERVICE_ACCOUNT) {
+    try {
+      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+    } catch (error) {
+      throw new Error('FIREBASE_SERVICE_ACCOUNT must contain valid Firebase service account JSON', { cause: error });
     }
-
-    admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(JSON.stringify(serviceAccount))),
-    });
   }
-  await app.listen(port ?? 3000,"0.0.0.0");
+  await app.listen(port, '0.0.0.0');
 }
-bootstrap();
+void bootstrap();

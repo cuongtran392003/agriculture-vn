@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsDateString, IsIn, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
 
 export class CreateTaskDto {
 
@@ -29,10 +29,12 @@ export class CreateTaskDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsDateString()
   scheduledDate: string;
 
   @IsString()
   @IsOptional()
+  @Matches(/^([01]\d|2[0-3]):[0-5]\d$|^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2})?$/)
   scheduledTime?: string;
 
   @IsString()

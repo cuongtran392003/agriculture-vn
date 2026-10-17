@@ -10,6 +10,8 @@ exports.FarmModule = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const farm_entity_1 = require("./schema/farm.entity");
+const plot_schema_1 = require("../plot/schema/plot.schema");
+const task_schema_1 = require("../tasks/schema/task.schema");
 const farm_controller_1 = require("./farm.controller");
 const farm_service_1 = require("./farm.service");
 let FarmModule = class FarmModule {
@@ -18,7 +20,11 @@ exports.FarmModule = FarmModule;
 exports.FarmModule = FarmModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: farm_entity_1.Farm.name, schema: farm_entity_1.FarmSchema }]),
+            mongoose_1.MongooseModule.forFeature([
+                { name: farm_entity_1.Farm.name, schema: farm_entity_1.FarmSchema },
+                { name: plot_schema_1.Plot.name, schema: plot_schema_1.PlotSchema },
+                { name: task_schema_1.Task.name, schema: task_schema_1.TaskSchema },
+            ]),
         ],
         controllers: [farm_controller_1.FarmController],
         providers: [farm_service_1.FarmService],

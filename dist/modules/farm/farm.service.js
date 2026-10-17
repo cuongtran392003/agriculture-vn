@@ -39,9 +39,11 @@ let FarmService = class FarmService {
             data: farms,
         };
     }
-    async findOne(id) {
+    async findOne(id, userId) {
+        if (!(0, mongoose_2.isValidObjectId)(id))
+            throw new common_1.NotFoundException('Farm not found');
         const farm = await this.farmModel
-            .findById(id)
+            .findOne({ _id: id, userId })
             .populate("userId", "name email");
         if (!farm) {
             throw new common_1.NotFoundException(`Farm with id ${id} not found`);
@@ -60,9 +62,12 @@ let FarmService = class FarmService {
             data: farms,
         };
     }
-    async update(id, updateFarmDto) {
-        const farm = await this.farmModel.findByIdAndUpdate(id, updateFarmDto, {
+    async update(id, userId, updateFarmDto) {
+        if (!(0, mongoose_2.isValidObjectId)(id))
+            throw new common_1.NotFoundException('Farm not found');
+        const farm = await this.farmModel.findOneAndUpdate({ _id: id, userId }, updateFarmDto, {
             new: true,
+            runValidators: true,
         });
         if (!farm) {
             throw new common_1.NotFoundException(`Farm with id ${id} not found`);
@@ -72,11 +77,13 @@ let FarmService = class FarmService {
             data: farm,
         };
     }
-    async remove(id) {
-        const farm = await this.farmModel.findByIdAndDelete(id);
-        if (!farm) {
+    async remove(id, userId) {
+        if (!(0, mongoose_2.isValidObjectId)(id))
+            throw new common_1.NotFoundException('Farm not found');
+        const farm = await this.farmModel.findOne({ _id: id, userId });
+        if (!farm)
             throw new common_1.NotFoundException(`Farm with id ${id} not found`);
-        }
+        await farm.deleteOne();
         return {
             message: "Farm deleted successfully",
             data: farm,

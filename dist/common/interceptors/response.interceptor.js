@@ -12,12 +12,16 @@ const operators_1 = require("rxjs/operators");
 let ResponseInterceptor = class ResponseInterceptor {
     intercept(context, next) {
         const statusCode = context.switchToHttp().getResponse().statusCode;
-        return next.handle().pipe((0, operators_1.map)((data) => ({
-            statusCode,
-            message: data?.message || 'Success',
-            data: data?.data !== undefined ? data.data : data,
-            ...(data?.meta && { meta: data.meta }),
-        })));
+        return next.handle().pipe((0, operators_1.map)((data) => {
+            if (data && typeof data.statusCode === 'number' && 'data' in data)
+                return data;
+            return {
+                statusCode,
+                message: data?.message || 'Success',
+                data: data?.data !== undefined ? data.data : data,
+                ...(data?.meta && { meta: data.meta }),
+            };
+        }));
     }
 };
 exports.ResponseInterceptor = ResponseInterceptor;

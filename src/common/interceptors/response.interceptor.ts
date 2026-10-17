@@ -13,12 +13,15 @@ export class ResponseInterceptor implements NestInterceptor {
     const statusCode = context.switchToHttp().getResponse().statusCode;
 
     return next.handle().pipe(
-      map((data) => ({
-        statusCode,
-        message: data?.message || 'Success',
-        data: data?.data !== undefined ? data.data : data,
-        ...(data?.meta && { meta: data.meta }),
-      })),
+      map((data) => {
+        if (data && typeof data.statusCode === 'number' && 'data' in data) return data;
+        return {
+          statusCode,
+          message: data?.message || 'Success',
+          data: data?.data !== undefined ? data.data : data,
+          ...(data?.meta && { meta: data.meta }),
+        };
+      }),
     );
   }
 }

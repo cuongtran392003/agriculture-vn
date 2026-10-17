@@ -1,15 +1,23 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Plot } from "./schema/plot.schema";
-import { Model } from "mongoose";
+import { Model, isValidObjectId } from "mongoose";
+import { Farm } from '../farm/schema/farm.entity';
+import { ForbiddenException } from '@nestjs/common';
 import { CreatePlotDto } from "./dto/create-plot.dto";
 import { UpdatePlotDto } from "./dto/update-plot.dto";
 
 @Injectable()
 export class PlotService {
-  constructor(@InjectModel(Plot.name) private plotModel: Model<Plot>) {}
+  constructor(
+    @InjectModel(Plot.name) private plotModel: Model<Plot>,
+    @InjectModel(Farm.name) private farmModel: Model<Farm>,
+  ) {}
 
   async create(createPlotDto: CreatePlotDto) {
+    if (!isValidObjectId(createPlotDto.farmId) || !(await this.farmModel.exists({ _id: createPlotDto.farmId, userId: createPlotDto.userId }))) {
+      throw new ForbiddenException('Farm does not belong to the current user');
+    }
     const plot = await this.plotModel.create(createPlotDto);
     return {
       message: "Plot created successfully",
@@ -28,9 +36,10 @@ export class PlotService {
     };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, userId: string) {
+    if (!isValidObjectId(id)) throw new NotFoundException('Plot not found');
     const plot = await this.plotModel
-      .findById(id)
+      .findOne({ _id: id, userId })
       .populate("farmId", "name");
     if (!plot) {
       throw new NotFoundException(`Plot with id ${id} not found`);
@@ -60,9 +69,11 @@ export class PlotService {
     };
   }
 
-  async update(id: string, updatePlotDto: UpdatePlotDto) {
-    const plot = await this.plotModel.findByIdAndUpdate(id, updatePlotDto, {
+  async update(id: string, userId: string, updatePlotDto: UpdatePlotDto) {
+    if (!isValidObjectId(id)) throw new NotFoundException('Plot not found');
+    const plot = await this.plotModel.findOneAndUpdate({ _id: id, userId }, updatePlotDto, {
       new: true,
+      runValidators: true,
     });
     if (!plot) {
       throw new NotFoundException(`Plot with id ${id} not found`);
@@ -73,8 +84,9 @@ export class PlotService {
     };
   }
 
-  async remove(id: string) {
-    const plot = await this.plotModel.findByIdAndDelete(id);
+  async remove(id: string, userId: string) {
+    if (!isValidObjectId(id)) throw new NotFoundException('Plot not found');
+    const plot = await this.plotModel.findOneAndDelete({ _id: id, userId });
     if (!plot) {
       throw new NotFoundException(`Plot with id ${id} not found`);
     }

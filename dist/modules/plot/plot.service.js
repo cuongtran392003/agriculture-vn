@@ -17,12 +17,19 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const plot_schema_1 = require("./schema/plot.schema");
 const mongoose_2 = require("mongoose");
+const farm_entity_1 = require("../farm/schema/farm.entity");
+const common_2 = require("@nestjs/common");
 let PlotService = class PlotService {
     plotModel;
-    constructor(plotModel) {
+    farmModel;
+    constructor(plotModel, farmModel) {
         this.plotModel = plotModel;
+        this.farmModel = farmModel;
     }
     async create(createPlotDto) {
+        if (!(0, mongoose_2.isValidObjectId)(createPlotDto.farmId) || !(await this.farmModel.exists({ _id: createPlotDto.farmId, userId: createPlotDto.userId }))) {
+            throw new common_2.ForbiddenException('Farm does not belong to the current user');
+        }
         const plot = await this.plotModel.create(createPlotDto);
         return {
             message: "Plot created successfully",
@@ -39,9 +46,11 @@ let PlotService = class PlotService {
             data: plots,
         };
     }
-    async findOne(id) {
+    async findOne(id, userId) {
+        if (!(0, mongoose_2.isValidObjectId)(id))
+            throw new common_1.NotFoundException('Plot not found');
         const plot = await this.plotModel
-            .findById(id)
+            .findOne({ _id: id, userId })
             .populate("farmId", "name");
         if (!plot) {
             throw new common_1.NotFoundException(`Plot with id ${id} not found`);
@@ -68,9 +77,12 @@ let PlotService = class PlotService {
             data: plots,
         };
     }
-    async update(id, updatePlotDto) {
-        const plot = await this.plotModel.findByIdAndUpdate(id, updatePlotDto, {
+    async update(id, userId, updatePlotDto) {
+        if (!(0, mongoose_2.isValidObjectId)(id))
+            throw new common_1.NotFoundException('Plot not found');
+        const plot = await this.plotModel.findOneAndUpdate({ _id: id, userId }, updatePlotDto, {
             new: true,
+            runValidators: true,
         });
         if (!plot) {
             throw new common_1.NotFoundException(`Plot with id ${id} not found`);
@@ -80,8 +92,10 @@ let PlotService = class PlotService {
             data: plot,
         };
     }
-    async remove(id) {
-        const plot = await this.plotModel.findByIdAndDelete(id);
+    async remove(id, userId) {
+        if (!(0, mongoose_2.isValidObjectId)(id))
+            throw new common_1.NotFoundException('Plot not found');
+        const plot = await this.plotModel.findOneAndDelete({ _id: id, userId });
         if (!plot) {
             throw new common_1.NotFoundException(`Plot with id ${id} not found`);
         }
@@ -95,6 +109,8 @@ exports.PlotService = PlotService;
 exports.PlotService = PlotService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(plot_schema_1.Plot.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __param(1, (0, mongoose_1.InjectModel)(farm_entity_1.Farm.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model])
 ], PlotService);
 //# sourceMappingURL=plot.service.js.map

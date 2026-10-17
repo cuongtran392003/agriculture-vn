@@ -41,7 +41,7 @@ __decorate([
 ], CreatePlotDto.prototype, "farmId", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePlotDto.prototype, "userId", void 0);
 //# sourceMappingURL=create-plot.dto.js.map

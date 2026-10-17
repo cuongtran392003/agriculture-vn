@@ -1,12 +1,16 @@
 import { Task } from "./schema/task.schema";
 import { Model } from "mongoose";
+import { Farm } from '../farm/schema/farm.entity';
+import { Plot } from '../plot/schema/plot.schema';
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
-import { PaginationDto } from "src/common/dto/pagination.dto";
-import { ResponseDto } from "src/common/dto/response.dto";
+import { PaginationDto } from "../../common/dto/pagination.dto";
+import { ResponseDto } from "../../common/dto/response.dto";
 export declare class TasksService {
     private taskModel;
-    constructor(taskModel: Model<Task>);
+    private farmModel;
+    private plotModel;
+    constructor(taskModel: Model<Task>, farmModel: Model<Farm>, plotModel: Model<Plot>);
     create(createTaskDto: CreateTaskDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Task, {}, import("mongoose").DefaultSchemaOptions> & Task & {
@@ -17,12 +21,13 @@ export declare class TasksService {
             id: string;
         };
     }>;
+    private buildReminderAt;
     findAll(userId: string, paginationDto: PaginationDto, farmId?: string, status?: string): Promise<ResponseDto<(Task & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
     })[]>>;
-    findOne(id: string): Promise<{
+    findOne(id: string, userId: string): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Task, {}, import("mongoose").DefaultSchemaOptions> & Task & {
             _id: import("mongoose").Types.ObjectId;
@@ -62,7 +67,7 @@ export declare class TasksService {
             id: string;
         })[];
     }>;
-    update(id: string, updateTaskDto: UpdateTaskDto): Promise<{
+    update(id: string, userId: string, updateTaskDto: UpdateTaskDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Task, {}, import("mongoose").DefaultSchemaOptions> & Task & {
             _id: import("mongoose").Types.ObjectId;
@@ -72,7 +77,7 @@ export declare class TasksService {
             id: string;
         };
     }>;
-    remove(id: string): Promise<{
+    remove(id: string, userId: string): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, Task, {}, import("mongoose").DefaultSchemaOptions> & Task & {
             _id: import("mongoose").Types.ObjectId;

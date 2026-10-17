@@ -15,18 +15,23 @@ const passport_1 = require("@nestjs/passport");
 const passport_jwt_1 = require("passport-jwt");
 const config_1 = require("@nestjs/config");
 const users_service_1 = require("../../users/users.service");
+const secrets_1 = require("../../../common/config/secrets");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
     configService;
     usersService;
     constructor(configService, usersService) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: configService.get('JWT_SECRET'),
+            secretOrKey: (0, secrets_1.getJwtSecret)(configService),
         });
         this.configService = configService;
         this.usersService = usersService;
     }
     async validate(payload) {
+        const legacyRefreshToken = !payload.tokenType && payload.iat && payload.exp && payload.exp - payload.iat > 2 * 24 * 60 * 60;
+        if (payload.tokenType === 'refresh' || (payload.tokenType && payload.tokenType !== 'access') || legacyRefreshToken) {
+            throw new common_1.UnauthorizedException('Invalid access token');
+        }
         const user = await this.usersService.findOne(payload.sub);
         if (!user) {
             throw new common_1.UnauthorizedException();

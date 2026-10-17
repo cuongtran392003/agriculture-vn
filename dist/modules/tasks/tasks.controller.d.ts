@@ -1,7 +1,7 @@
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
-import { PaginationDto } from "src/common/dto/pagination.dto";
+import { PaginationDto } from "../../common/dto/pagination.dto";
 export declare class TasksController {
     private readonly tasksService;
     constructor(tasksService: TasksService);
@@ -20,7 +20,7 @@ export declare class TasksController {
     } & {
         __v: number;
     })[]>>;
-    findOne(id: string): Promise<{
+    findOne(id: string, req: any): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/task.schema").Task, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/task.schema").Task & {
             _id: import("mongoose").Types.ObjectId;
@@ -30,7 +30,7 @@ export declare class TasksController {
             id: string;
         };
     }>;
-    update(id: string, updateTaskDto: UpdateTaskDto): Promise<{
+    update(id: string, req: any, updateTaskDto: UpdateTaskDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/task.schema").Task, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/task.schema").Task & {
             _id: import("mongoose").Types.ObjectId;
@@ -40,7 +40,7 @@ export declare class TasksController {
             id: string;
         };
     }>;
-    remove(id: string): Promise<{
+    remove(id: string, req: any): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schema/task.schema").Task, {}, import("mongoose").DefaultSchemaOptions> & import("./schema/task.schema").Task & {
             _id: import("mongoose").Types.ObjectId;

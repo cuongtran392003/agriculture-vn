@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     build:
@@ -9,10 +7,14 @@ services:
     restart: unless-stopped
     ports:
       - '${PORT:-3000}:3000'
-    env_file:
-      - .env
+    environment:
+      PORT: 3000
+      MONGODB_URI: ${DOCKER_MONGODB_URI:-mongodb://mongodb:27017/agricultureVN}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in your environment or .env file}
+      FIREBASE_SERVICE_ACCOUNT: ${FIREBASE_SERVICE_ACCOUNT:-}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - agriculturevn-network
 
@@ -21,11 +23,16 @@ services:
     container_name: agriculturevn-mongodb
     restart: unless-stopped
     ports:
-      - '27017:27017'
+      - '127.0.0.1:27017:27017'
     environment:
       MONGO_INITDB_DATABASE: agricultureVN
     volumes:
       - mongodb_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand("ping").ok']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - agriculturevn-network
 

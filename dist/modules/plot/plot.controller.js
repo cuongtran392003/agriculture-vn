@@ -34,14 +34,14 @@ let PlotController = class PlotController {
         }
         return await this.plotService.findByUserId(userId);
     }
-    async findOne(id) {
-        return await this.plotService.findOne(id);
+    async findOne(id, req) {
+        return await this.plotService.findOne(id, req.user._id);
     }
-    async update(id, updatePlotDto) {
-        return await this.plotService.update(id, updatePlotDto);
+    async update(id, req, updatePlotDto) {
+        return await this.plotService.update(id, req.user._id, updatePlotDto);
     }
-    async remove(id) {
-        return await this.plotService.remove(id);
+    async remove(id, req) {
+        return await this.plotService.remove(id, req.user._id);
     }
 };
 exports.PlotController = PlotController;
@@ -64,23 +64,26 @@ __decorate([
 __decorate([
     (0, common_1.Get)(":id"),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PlotController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_plot_dto_1.UpdatePlotDto]),
+    __metadata("design:paramtypes", [String, Object, update_plot_dto_1.UpdatePlotDto]),
     __metadata("design:returntype", Promise)
 ], PlotController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(":id"),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PlotController.prototype, "remove", null);
 exports.PlotController = PlotController = __decorate([

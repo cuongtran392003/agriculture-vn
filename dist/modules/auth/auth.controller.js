@@ -17,6 +17,14 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const register_dto_1 = require("./dto/register.dto");
 const login_dto_1 = require("./dto/login.dto");
+const class_validator_1 = require("class-validator");
+class RefreshTokenDto {
+    refreshToken;
+}
+__decorate([
+    (0, class_validator_1.IsJWT)(),
+    __metadata("design:type", String)
+], RefreshTokenDto.prototype, "refreshToken", void 0);
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -51,7 +59,7 @@ __decorate([
     (0, common_1.Post)('refresh'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [RefreshTokenDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "refresh", null);
 exports.AuthController = AuthController = __decorate([

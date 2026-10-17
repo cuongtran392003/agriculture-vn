@@ -5,6 +5,16 @@ export type TaskDocument = HydratedDocument<Task>;
 
 @Schema({ timestamps: true })
 export class Task {
+  @Prop({ type: Types.ObjectId, ref: 'CarePlan', index: true }) carePlanId?: Types.ObjectId;
+  @Prop() careKey?: string;
+  @Prop() careAction?: string;
+  @Prop() growthStage?: string;
+  @Prop() careBaseTime?: string;
+  @Prop() careRainThresholdMm?: number;
+  @Prop() careHeatThresholdC?: number;
+  @Prop({ default: false }) weatherBlocked?: boolean;
+  @Prop({ default: false }) carePaused?: boolean;
+  @Prop() weatherNote?: string;
   @Prop({ type: Types.ObjectId, ref: "User", required: true, index: true })
   userId: Types.ObjectId;
 
@@ -48,6 +58,10 @@ export class Task {
 
   @Prop({default: false, index:true})
   isNotified: boolean
+
+  @Prop({ index: true })
+  reminderClaimedAt?: Date;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
+TaskSchema.index({ carePlanId: 1, careKey: 1 }, { unique: true, partialFilterExpression: { carePlanId: { $exists: true }, careKey: { $exists: true } } });

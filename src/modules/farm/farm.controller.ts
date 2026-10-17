@@ -13,7 +13,7 @@ import {
 import { FarmService } from "./farm.service";
 import { CreateFarmDto } from "./dto/create-farm.dto";
 import { UpdateFarmDto } from "./dto/update-farm.dto";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 
 @UseGuards(JwtAuthGuard)
 @Controller("farm")
@@ -37,20 +37,21 @@ export class FarmController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string) {
-    return await this.farmService.findOne(id);
+  async findOne(@Param("id") id: string, @Req() req: any) {
+    return await this.farmService.findOne(id, req.user._id);
   }
 
   @Patch(":id")
   async update(
     @Param("id") id: string,
+    @Req() req: any,
     @Body() updateFarmDto: UpdateFarmDto,
   ) {
-    return await this.farmService.update(id, updateFarmDto);
+    return await this.farmService.update(id, req.user._id, updateFarmDto);
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string) {
-    return await this.farmService.remove(id);
+  async remove(@Param("id") id: string, @Req() req: any) {
+    return await this.farmService.remove(id, req.user._id);
   }
 }
